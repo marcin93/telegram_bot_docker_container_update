@@ -54,7 +54,7 @@ def update_image():
                 # Start new container
                 subprocess.run(["docker-compose", "up", "-d"])
 
-                # Get idling images
+                # Get dangling images
                 command = ["docker", "images", "--filter", "dangling=true", "-q", "--no-trunc"]
                 image_ids = subprocess.check_output(command).decode("utf-8").strip().split("\n")
 
@@ -67,7 +67,7 @@ def update_image():
                 message = "Image got successfully updated and started with version {} .".format(latest_version)
                 if is_authorized_user(authorized_user_id):
                    send_message(message)
-                logging.info("Image update to versoin {} successful.".format(latest_version))
+                logging.info("Image update to version {} successful.".format(latest_version))
                 return
             else:
                 # Send message about lack of updates
