@@ -54,6 +54,15 @@ def update_image():
                 # Start new container
                 subprocess.run(["docker-compose", "up", "-d"])
 
+                # Get idling images
+                command = ["docker", "images", "--filter", "dangling=true", "-q", "--no-trunc"]
+                image_ids = subprocess.check_output(command).decode("utf-8").strip().split("\n")
+
+                # Remove old images
+                for image_id in image_ids:
+                    command = ["docker", "rmi", image_id]
+                    subprocess.run(command)
+                    
                 # Send success message
                 message = "Image got successfully updated and started with version {} .".format(latest_version)
                 if is_authorized_user(authorized_user_id):
